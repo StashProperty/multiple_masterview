@@ -49,18 +49,18 @@ RSpec.describe Scraper do
       expect(results).to eq expected
 
       geocodable = results
-                     .map { |record| record["address"] }
-                     .uniq
-                     .count { |text| ScraperUtils::SpecSupport.geocodable? text }
+                   .map { |record| record["address"] }
+                   .uniq
+                   .count { |text| ScraperUtils::SpecSupport.geocodable? text }
       puts "Found #{geocodable} out of #{results.count} unique geocodable addresses " \
              "(#{(100.0 * geocodable / results.count).round(1)}%)"
       expected = [(0.5 * results.count - 3), 1].max
       expect(geocodable).to be >= expected
 
       descriptions = results
-                       .map { |record| record["description"] }
-                       .uniq
-                       .count do |text|
+                     .map { |record| record["description"] }
+                     .uniq
+                     .count do |text|
         selected = ScraperUtils::SpecSupport.reasonable_description? text
         puts "  description: #{text} is not reasonable" if ENV["DEBUG"] && !selected
         selected
@@ -71,15 +71,15 @@ RSpec.describe Scraper do
       expect(descriptions).to be >= expected
 
       info_urls = results
-                    .map { |record| record["info_url"] }
-                    .uniq
-                    .count { |text| text.to_s.match(%r{\Ahttps?://}) }
+                  .map { |record| record["info_url"] }
+                  .uniq
+                  .count { |text| text.to_s.match(%r{\Ahttps?://}) }
       puts "Found #{info_urls} out of #{results.count} unique info_urls " \
              "(#{(100.0 * info_urls / results.count).round(1)}%)"
       expected = info_urls == 1 ? 1 : [(0.7 * results.count - 3), 1].max
       expect(info_urls).to be >= expected
 
-      no_details_on_info_link = info_urls == 1 || %i[
+      info_urls == 1 || %i[
         albury ballina bega_valley broken_hill bundaberg
         cessnock dubbo griffith gunnedah gympie lismore maranoa
         muswellbrook port_stephens port_macquarie_hastings
